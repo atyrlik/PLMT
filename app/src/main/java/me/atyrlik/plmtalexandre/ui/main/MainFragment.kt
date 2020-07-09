@@ -42,11 +42,13 @@ class MainFragment : Fragment() {
         with (binding.chart) {
             xAxis.granularity = 600f
             xAxis.isGranularityEnabled = true
-            axisLeft.axisMinimum = 0f
-            axisLeft.axisMaximum = 150f // if values are over 150, a special case could be added. For now, it helps visualizing the data.
+            // I'm not sure if it's better to have a hard min/max or not.
+            // Let's disable it for now.
+            //axisLeft.axisMinimum = 0f
+            //axisLeft.axisMaximum = 150f
             setTouchEnabled(true)
         }
-        
+
         binding.switchVoc.setOnCheckedChangeListener { _, _ -> viewModel.measures.value?.let{ plotMeasures(it) } }
         binding.switchNo2.setOnCheckedChangeListener { _, _ -> viewModel.measures.value?.let{ plotMeasures(it) } }
         binding.switchPm10.setOnCheckedChangeListener { _, _ -> viewModel.measures.value?.let{ plotMeasures(it) } }
