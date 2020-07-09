@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PLMT Alexandre</string>
+    <string name="voc_measure">VOC: %d</string>
+    <string name="no2_measure">NO2: %d</string>
+    <string name="pm10_measure">PM10: %d</string>
+    <string name="pm25_measure">PM25: %d</string>
 </resources>

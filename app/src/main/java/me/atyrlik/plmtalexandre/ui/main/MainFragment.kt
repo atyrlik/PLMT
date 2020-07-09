@@ -2,20 +2,20 @@ package me.atyrlik.plmtalexandre.ui.main
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.plumelabs.lib.bluetooth.MeasurementType
+import me.atyrlik.plmtalexandre.R
 import me.atyrlik.plmtalexandre.databinding.MainFragmentBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.roundToInt
 
 class MainFragment : Fragment() {
     private var _binding: MainFragmentBinding? = null
@@ -48,31 +48,45 @@ class MainFragment : Fragment() {
         }
 
         viewModel.measures.observe(viewLifecycleOwner, Observer { measures ->
+            // filter measures by type
+            val measuresVOC = measures.filter { it.type == MeasurementType.VOC }
+            val measuresNO2 = measures.filter { it.type == MeasurementType.NO2 }
+            val measuresPM10 = measures.filter { it.type == MeasurementType.PM10 }
+            val measuresPM25 = measures.filter { it.type == MeasurementType.PM25 }
 
-            val datasetVOC = ScatterDataSet(
-                measures.filter { it.type == MeasurementType.VOC }.map { Entry(it.timestamp!!.toFloat(), it.aqi!!) }
-                , "NO2").apply {
+            // update headers values
+            measuresVOC.last().aqi?.let { voc ->
+                binding.measureVoc.text = getString(R.string.voc_measure, voc.roundToInt())
+                binding.measureVoc.setBackgroundColor(if (voc > 50) Color.RED else Color.GREEN)
+            }
+            measuresNO2.last().aqi?.let { no2 ->
+                binding.measureNo2.text = getString(R.string.no2_measure, no2.roundToInt())
+                binding.measureNo2.setBackgroundColor(if (no2 > 50) Color.RED else Color.GREEN)
+            }
+            measuresPM10.last().aqi?.let { pm10 ->
+                binding.measurePm10.text = getString(R.string.pm10_measure, pm10.roundToInt())
+                binding.measurePm10.setBackgroundColor(if (pm10 > 50) Color.RED else Color.GREEN)
+            }
+            measuresPM25.last().aqi?.let { pm25 ->
+                binding.measurePm25.text = getString(R.string.pm25_measure, pm25.roundToInt())
+                binding.measurePm25.setBackgroundColor(if (pm25 > 50) Color.RED else Color.GREEN)
+            }
+
+            // create datasets
+            val datasetVOC = ScatterDataSet(measuresVOC.map { Entry(it.timestamp!!.toFloat(), it.aqi!!) }, "NO2").apply {
                 color = Color.GREEN
             }
-
-            val datasetN02 = ScatterDataSet(
-                measures.filter { it.type == MeasurementType.NO2 }.map { Entry(it.timestamp!!.toFloat(), it.aqi!!) }
-                , "NO2").apply {
+            val datasetN02 = ScatterDataSet(measuresNO2.map { Entry(it.timestamp!!.toFloat(), it.aqi!!) }, "NO2").apply {
                 color = Color.BLUE
             }
-
-            val datasetPM10 = ScatterDataSet(
-                measures.filter { it.type == MeasurementType.PM10 }.map { Entry(it.timestamp!!.toFloat(), it.aqi!!) }
-                , "PM10").apply {
+            val datasetPM10 = ScatterDataSet(measuresPM10.map { Entry(it.timestamp!!.toFloat(), it.aqi!!) }, "PM10").apply {
                 color = Color.RED
             }
-
-            val datasetPM25 = ScatterDataSet(
-                measures.filter { it.type == MeasurementType.PM25 }.map { Entry(it.timestamp!!.toFloat(), it.aqi!!) }
-                , "PM25").apply {
+            val datasetPM25 = ScatterDataSet(measuresPM25.map { Entry(it.timestamp!!.toFloat(), it.aqi!!) }, "PM25").apply {
                 color = Color.YELLOW
             }
 
+            // update chart
             binding.chart.data = ScatterData(datasetVOC, datasetN02, datasetPM10, datasetPM25)
 
             binding.chart.notifyDataSetChanged()
