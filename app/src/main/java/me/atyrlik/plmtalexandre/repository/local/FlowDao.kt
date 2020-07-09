@@ -8,7 +8,7 @@ import me.atyrlik.plmtalexandre.entities.FlowMeasure
 
 @Dao
 interface FlowDao {
-    @Query("SELECT * FROM flowmeasure")
+    @Query("SELECT * FROM flowmeasure ORDER BY timestamp ")
     fun getAll(): Flow<List<FlowMeasure>>
 
     @Insert
