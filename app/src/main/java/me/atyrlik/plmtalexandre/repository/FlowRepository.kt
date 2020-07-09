@@ -31,7 +31,7 @@ class FlowRepositoryImpl(
     override suspend fun registerFlowMeasures() {
         val feed = callbackFlow {
             flowClient.connect { client, error ->
-                // I'm not sure what is the correct behaviour in case or error.
+                // I'm not sure what is the correct behaviour in case of error.
                 // Let's just close the connection.
                 error?.let { close() }
 

@@ -40,7 +40,6 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with (binding.chart) {
-            xAxis.granularity = 600f
             xAxis.isGranularityEnabled = true
             // I'm not sure if it's better to have a hard min/max or not.
             // Let's disable it for now.
@@ -54,13 +53,14 @@ class MainFragment : Fragment() {
         binding.switchPm10.setOnCheckedChangeListener { _, _ -> viewModel.measures.value?.let{ plotMeasures(it) } }
         binding.switchPm25.setOnCheckedChangeListener { _, _ -> viewModel.measures.value?.let{ plotMeasures(it) } }
 
-
         viewModel.measures.observe(viewLifecycleOwner, Observer { measures ->
             plotMeasures(measures)
         })
     }
 
     private fun plotMeasures(measures: List<FlowMeasure>) {
+        if (measures.isEmpty()) return
+
         // filter measures by type
         val measuresVOC = measures.filter { it.type == MeasurementType.VOC }
         val measuresNO2 = measures.filter { it.type == MeasurementType.NO2 }
@@ -68,19 +68,19 @@ class MainFragment : Fragment() {
         val measuresPM25 = measures.filter { it.type == MeasurementType.PM25 }
 
         // update headers values
-        measuresVOC.last().aqi?.let { voc ->
+        measuresVOC.lastOrNull()?.aqi?.let { voc ->
             binding.measureVoc.text = getString(R.string.voc_measure, voc.roundToInt())
             binding.measureVoc.setBackgroundColor(if (voc > 50) Color.RED else Color.GREEN)
         }
-        measuresNO2.last().aqi?.let { no2 ->
+        measuresNO2.lastOrNull()?.aqi?.let { no2 ->
             binding.measureNo2.text = getString(R.string.no2_measure, no2.roundToInt())
             binding.measureNo2.setBackgroundColor(if (no2 > 50) Color.RED else Color.GREEN)
         }
-        measuresPM10.last().aqi?.let { pm10 ->
+        measuresPM10.lastOrNull()?.aqi?.let { pm10 ->
             binding.measurePm10.text = getString(R.string.pm10_measure, pm10.roundToInt())
             binding.measurePm10.setBackgroundColor(if (pm10 > 50) Color.RED else Color.GREEN)
         }
-        measuresPM25.last().aqi?.let { pm25 ->
+        measuresPM25.lastOrNull()?.aqi?.let { pm25 ->
             binding.measurePm25.text = getString(R.string.pm25_measure, pm25.roundToInt())
             binding.measurePm25.setBackgroundColor(if (pm25 > 50) Color.RED else Color.GREEN)
         }
