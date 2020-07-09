@@ -17,6 +17,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/measure_no2"/>
 
+    <Switch
+        android:id="@+id/switch_voc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/measure_voc"
+        app:layout_constraintEnd_toEndOf="@id/measure_voc"
+        app:layout_constraintTop_toBottomOf="@id/measure_voc"/>
+
     <TextView
         android:id="@+id/measure_no2"
         android:layout_width="wrap_content"
@@ -26,6 +34,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/measure_voc"
         app:layout_constraintEnd_toStartOf="@id/measure_pm10"/>
+
+    <Switch
+        android:id="@+id/switch_no2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/measure_no2"
+        app:layout_constraintEnd_toEndOf="@id/measure_no2"
+        app:layout_constraintTop_toBottomOf="@id/measure_no2"/>
 
     <TextView
         android:id="@+id/measure_pm10"
@@ -37,6 +53,14 @@
         app:layout_constraintStart_toEndOf="@id/measure_no2"
         app:layout_constraintEnd_toStartOf="@id/measure_pm25"/>
 
+    <Switch
+        android:id="@+id/switch_pm10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/measure_pm10"
+        app:layout_constraintEnd_toEndOf="@id/measure_pm10"
+        app:layout_constraintTop_toBottomOf="@id/measure_pm10"/>
+
     <TextView
         android:id="@+id/measure_pm25"
         android:layout_width="wrap_content"
@@ -47,12 +71,20 @@
         app:layout_constraintStart_toEndOf="@id/measure_pm10"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <Switch
+        android:id="@+id/switch_pm25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/measure_pm25"
+        app:layout_constraintEnd_toEndOf="@id/measure_pm25"
+        app:layout_constraintTop_toBottomOf="@id/measure_pm25"/>
+
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/measures_barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="measure_voc, measure_no2, measure_pm10, measure_pm25"/>
+        app:constraint_referenced_ids="switch_voc, switch_no2, switch_pm10, switch_pm25"/>
 
     <com.github.mikephil.charting.charts.ScatterChart
         android:layout_height="0dp"
